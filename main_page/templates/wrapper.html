@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+
+<head>
+    <meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Gamification LMS</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="Gamification LMS" />
+	<meta name="keywords" content="Gamification, LMS, игрофикация, системы дистанционного обучения" />
+	<meta name="author" content="Vladislav Mekhryakov" />
+
+    {% load staticfiles %}
+
+	<link rel="shortcut icon" href="favicon.ico">
+
+	<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,300' rel='stylesheet' type='text/css'>
+
+	{% load staticfiles %}
+
+	<link rel="stylesheet" href="{% static "/main/css/animate.css" %}">
+	<!-- Icomoon Icon Fonts-->
+	<link rel="stylesheet" href="{% static "/main/css/icomoon.css" %}">
+	<!-- Bootstrap  -->
+	<link rel="stylesheet" href="{% static "/main/css/bootstrap.css" %}">
+	<!-- Superfish -->
+	<link rel="stylesheet" href="{% static "/main/css/superfish.css" %}">
+
+	<link rel="stylesheet" href="{% static "/main/css/style.css" %}">
+
+
+	<!-- Modernizr JS -->
+	<script src="{% static "main/js/modernizr-2.6.2.min.js" %}"></script>
+	<!-- FOR IE9 below -->
+	<!--[if lt IE 9]>
+	<script src="{% static "main/js/respond.min.js" %}"></script>
+	<![endif]-->
+
+</head>
+<body>
+		<div id="fh5co-wrapper">
+		<div id="fh5co-page">
+		<div id="fh5co-header">
+			<div class="top">
+				<div class="container">
+					<span> <a href="/login">Войти</a></span>
+				</div>
+			</div>
+			<!-- end:top -->
+			<header id="fh5co-header-section">
+				<div class="container">
+					<div class="nav-header">
+						<a href="#" class="js-fh5co-nav-toggle fh5co-nav-toggle"><i></i></a>
+						<h1 id="fh5co-logo"><a href="/home">Gamification LMS</a></h1>
+						<!-- START #fh5co-menu-wrap -->
+					<nav id="fh5co-menu-wrap" role="navigation">
+						<ul class="sf-menu" id="fh5co-primary-menu">
+							<li class="active">
+								<a href="index.html">Домашняя страница</a>
+							</li>
+							<li>
+								<a href="portfolio.html">Настройка компонентов</a>
+							</li>
+							<li><a href="services.html" class="fh5co-sub-ddown">Услуги</a></li>
+							<li><a href="about.html">О нас</a></li>
+							<li><a href="contact.html">Контакты</a></li>
+						</ul>
+					</nav>
+					</div>
+				</div>
+			</header>
+
+		</div>
+
+
+		<div class="fh5co-hero">
+			<div class="fh5co-overlay"></div>
+			<div class="fh5co-cover text-center" style="background-image: url({% static "/main/images/work-3.jpg" %});">
+				<div class="desc animate-box">
+					{% block content %}
+                    {% endblock %}
+				</div>
+			</div>
+
+		</div>
+		<!-- end:header-top -->
+		<footer>
+			<div id="footer">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-6">
+							<p>Copyright 2018 Vladislav Mekhryakov. All Rights Reserved.</p>
+						</div>
+						<div class="col-md-6">
+							<ul class="footer-menu">
+								<li><a href="#">Домашняя</a></li>
+								<li><a href="#">Настройка</a></li>
+								<li><a href="#">Услуги</a></li>
+								<li><a href="#">О нас</a></li>
+								<li><a href="#">Контакты</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</footer>
+
+
+	</div>
+	<!-- END fh5co-page -->
+
+	</div>
+	<!-- END fh5co-wrapper -->
+	<!-- jQuery -->
+	<script src="{% static "/main/js/jquery.min.js" %}"></script>
+	<!-- jQuery Easing -->
+	<script src="{% static "/main/js/jquery.easing.1.3.js" %}"></script>
+	<!-- Bootstrap -->
+	<script src="{% static "/main/js/bootstrap.min.js" %}"></script>
+	<!-- Waypoints -->
+	<script src="{% static "/main/js/jquery.waypoints.min.js" %}"></script>
+	<!-- Superfish -->
+	<script src="{% static "/main/js/hoverIntent.js" %}"></script>
+	<script src="{% static "/main/js/superfish.js" %}"></script>
+
+	<!-- Main JS (Do not remove) -->
+	<script src="{% static "/main/js/main.js" %}"></script>
+
+</body>
+</html>
