@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<head>
+    {% load staticfiles %}
+    <link rel="stylesheet" href="{% static "/main/css/login.css" %}">
+    <link rel="stylesheet" href="{% static "/main/css/style.css" %}">
+</head>
+<body style="background-image: url({% static "/main/images/work-3.jpg" %});">
+<div class="login-page">
+  <div class="form">
+    <form class="login-form" method="post" action="{% url 'account_logout' %}">
+        {% csrf_token %}
+        <h1 class="fh5co-logo">Gamification LMS</h1>
+        <p>Вы действительно хотите выйти?</p>
+      <button class="primaryAction" type="submit">Выйти</button>
+        <p class="message"><a href="/">Вернуться на главную</a></p>
+    </form>
+  </div>
+</div>
+</body>

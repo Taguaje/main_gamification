@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<head>
+    {% load staticfiles %}
+    <link rel="stylesheet" href="{% static "/main/css/login.css" %}">
+    <link rel="stylesheet" href="{% static "/main/css/style.css" %}">
+       <style>
+        ul {
+            list-style-type: none;
+            padding: 0;
+            color: red;
+        }
+        li {
+            display: inline-block;
+        }
+    </style>
+</head>
+<body style="background-image: url({% static "/main/images/work-3.jpg" %});">
+<div class="login-page">
+  <div class="form">
+    <form class="signup" id="signup_form" method="post" action="/accounts/signup/">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        <h1 class="fh5co-logo">Gamification LMS</h1>
+      <input type="text" name="username" id="id_username" placeholder="Имя пользователя" required/>
+        {{ form.username.errors }}
+      <input type="text" name="email" id="id_email" placeholder="E-mail"/>
+        {{ form.email.errors }}
+      <input type="password" placeholder="Пароль" name="password1" value="" id="id_password1" required/>
+        {{ form.password1.errors }}
+      <input type="password" placeholder="Пароль еще раз" name="password2" value="" id="id_password2" required/>
+        {{ form.password2.errors }}
+      <button type="submit">Зарегистрироваться</button>
+      <p class="message">Уже зарегистрированы? <a href="/accounts/login/">Войти</a></p>
+    </form>
+  </div>
+</div>
+</body>

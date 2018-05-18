@@ -15,11 +15,10 @@
 
     {% load staticfiles %}
 
-	<link rel="shortcut icon" href="favicon.ico">
-
 	<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,300' rel='stylesheet' type='text/css'>
 
 	{% load staticfiles %}
+    {% load account %}
 
 	<link rel="stylesheet" href="{% static "/main/css/animate.css" %}">
 	<!-- Icomoon Icon Fonts-->
@@ -46,7 +45,12 @@
 		<div id="fh5co-header">
 			<div class="top">
 				<div class="container">
-					<span> <a href="/login">Войти</a></span>
+					<span> {% user_display user %}</span>
+                    {% if user.is_anonymous %}
+                        <span> <a href="/accounts/login">Войти</a></span>
+                    {% else %}
+                        <span> <a href="/accounts/logout">Выйти</a></span>
+                    {% endif %}
 				</div>
 			</div>
 			<!-- end:top -->
