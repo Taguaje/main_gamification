@@ -1,0 +1,98 @@
+{% extends 'wrapper.html' %}
+{% load staticfiles %}
+{% block content %}
+    <div class="container-fluid">
+    <div class="row" style="height: 86vh">
+        <div class="col-12 col-md-3 col-xl-2 bd-sidebar pt-4 pb-4 border-right">
+            <ul class="nav nav-pills nav-stacked">
+                <li class="nav-item">
+                    <a class="nav-link text-dark" href="/profile">Личный кабинет</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" href="#">Список пользователей LMS</a>
+                </li>
+                <li class="nav-item">
+                   <a  class="nav-link active bg-dark" href="/settings">Настройка игрофикации</a>
+                </li>
+
+            </ul>
+        </div>
+        <main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 bd-content" role="main">
+            <div class="row">
+                <h4>Ваша LMS</h4>
+            </div>
+            <div class="row border-top pt-2 pb-2">
+                <div class="col-sm-4">
+                    <label class="text-muted" for="email">LMS </label>
+                </div>
+                <div class="col-sm-4 text-center">
+                    <span id="email" class="pl-1">{{ lms }}</span>
+                </div>
+                <div class="col-sm-4 text-right">
+                    <button class="btn btn-outline-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                        {% if lms == 'не создана' %}
+                            Создать
+                        {% else %}
+                            Изменить
+                        {% endif %}
+                    </button>
+                </div>
+            </div>
+            {% if form.email.errors %}
+                <div class="collapse show" id="collapseExample">
+            {% else %}
+                <div class="collapse" id="collapseExample">
+            {% endif %}
+            {% if lms == 'не создана' %}
+                {% include 'settings/lms_create_form.html' %}
+            {% else %}
+                {% include 'settings/lms_change_name_form.html' %}
+            {% endif %}
+            </div>
+        <div class="row">
+            <h4>Компоненты игрофикации</h4>
+        </div>
+            <div class="container-fluid border-top pl-0 pr-0">
+                <div class="row pt-2 pb-2 align-items-center">
+                    <div class="col-6">
+                        <img src="{% static '/img/if_sport_badges-09.png' %}" class="img-fluid" height="40" width="40">
+                        <span>Очки</span>
+                    </div>
+                    <div class="col-6 text-right">
+                        <button class="btn btn-outline-primary">Настроить</button>
+                    </div>
+                </div>
+                <div class="row pt-2 pb-2 align-items-center">
+                    <div class="col-6">
+                        <img src="{% static '/img/if_sport_badges-06.png' %}" class="img-fluid" height="40" width="40">
+                        <span>Уровни</span>
+                    </div>
+                    <div class="col-6 text-right">
+                        <button class="btn btn-outline-primary">Настроить</button>
+                    </div>
+                </div>
+                <div class="row pt-2 pb-2 align-items-center">
+                    <div class="col-6">
+                        <img src="{% static '/img/if_sport_badges-02.png' %}" class="img-fluid" height="40" width="40">
+                        <span>Бейджи</span>
+                    </div>
+                    <div class="col-6 text-right">
+                        <button class="btn btn-outline-primary">Настроить</button>
+                    </div>
+                </div>
+                <div class="row pt-2 pb-2 align-items-center">
+                    <div class="col-6">
+                        <img src="{% static '/img/if_sport_badges-05.png' %}" class="img-fluid" height="40" width="40">
+                        <span>Таблицы рейтинга</span>
+                    </div>
+                    <div class="col-6 text-right">
+                        <button class="btn btn-outline-primary">Настроить</button>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+    </div>
+
+{% endblock %}

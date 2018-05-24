@@ -4,12 +4,12 @@
     {% load staticfiles %}
     {% load account %}
     <title>Сервис игрофикации</title>
-    <script src="{% static '/main/js/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static '/bootstrap/js/jquery-3.3.1.min.js' %}"></script>
     <link rel="stylesheet" href="{% static '/bootstrap/css/bootstrap.css' %}">
     <script src="{% static '/bootstrap/js/bootstrap.js' %}"></script>
 </head>
 <body style="height: 100vh">
-<header class="navbar navbar-expand-lg navbar-light bg-light" style="height: 7vh">
+<header class="navbar navbar-expand-lg navbar-light bg-light rounded-bottom" style="height: 7vh;">
     <a class="navbar-brand" href="/home">
         Сервис игрофикации
         <img src="{% static '/img/logo.png' %}" width="30" height="30" class="d-inline-block align-top" alt="">
