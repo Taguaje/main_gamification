@@ -1,8 +1,8 @@
 <form method="post" action="/profile">
     {% csrf_token %}
     <div class="form-group row pt-2 pb-2 border-top">
-        <label for="id_email" class="col-sm-4 col-form-label text-muted">Новый адрес</label>
-        <div class="col-sm-4">
+        <label for="id_email" class="col-4 col-lg-4 col-form-label text-muted">Новый адрес</label>
+        <div class="col-6 col-lg-4">
             <input type="email" class="form-control" id="id_email" required placeholder="Email" name="email">
             {% for error in form.email.errors %}
                 <div class="text-danger text-center">
@@ -10,8 +10,8 @@
                 </div>
             {% endfor %}
         </div>
-        <div class="col-sm-4 text-right">
-            <button type="submit" class="btn btn-primary btn-sm">Сохранить адрес</button>
+        <div class="col-2 col-lg-4 text-right">
+            <button type="submit" class="btn btn-primary">Сохранить</button>
         </div>
     </div>
 </form>

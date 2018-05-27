@@ -1,51 +1,41 @@
 {% extends 'wrapper.html' %}
+{% block sidebar %}
+    <ul class="nav nav-pills nav-stacked">
+        <li class="nav-item">
+            <a class="nav-link bg-dark active" href="/profile">Личный кабинет</a>
+        </li>
+        <li class="nav-item">
+            <a  class="nav-link text-dark" href="/settings">Настройка игрофикации</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" href="#">Список пользователей LMS</a>
+        </li>
+    </ul>
+{% endblock %}
+
 {% block content %}
-    <div class="container-fluid">
-    <div class="row" style="height: 86vh">
-        <div class="col-12 col-md-3 col-xl-2 bd-sidebar pt-4 pb-4 border-right">
-            <ul class="nav nav-pills nav-stacked">
-                <li class="nav-item">
-                    <a class="nav-link bg-dark active" href="/profile">Личный кабинет</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-dark" href="#">Список пользователей LMS</a>
-                </li>
-                <li class="nav-item">
-                   <a  class="nav-link text-dark" href="/settings">Настройка игрофикации</a>
-                </li>
 
-            </ul>
+    <h4>Личные данные</h4>
+    <div class="row pt-2 pb-2 border-top">
+        <div class="col-4 col-lg-4">
+            <label class="text-muted" for="email">Электронный адрес </label>
         </div>
-        <main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 bd-content" role="main">
-
-            <div class="container-fluid">
-                <h4>Личные данные</h4>
-                <div class="container-fluid border-top pt-2">
-                    <div class="row">
-                        <div class="col-sm-4">
-                            <label class="text-muted" for="email">Электронный адрес </label>
-                        </div>
-                        <div class="col-sm-4 text-center">
-                            <span id="email" class="pl-1">{{ email }}</span>
-                        </div>
-                        <div class="col-sm-4 text-right">
-                            <button class="btn btn-outline-primary btn-sm pl-1 pull-right" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-                                Изменить
-                            </button>
-                        </div>
-                    </div>
-                    {% if form.email.errors %}
-                        <div class="collapse show" id="collapseExample">
-                    {% else %}
-                        <div class="collapse" id="collapseExample">
-                    {% endif %}
-                    {% include 'personal_page/email_form.html' %}
-                    </div>
-                </div>
-            </div>
-            </div>
-        </main>
+        <div class="col-6 col-lg-4 text-center">
+            <span id="email" class="pl-1">{{ email }}</span>
+        </div>
+        <div class="col-2 col-lg-4 text-right">
+            <button class="btn btn-outline-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                Изменить
+            </button>
+        </div>
     </div>
-    </div>
+    {% if form.email.errors %}
+        <div class="collapse show" id="collapseExample">
+    {% else %}
+        <div class="collapse" id="collapseExample">
+    {% endif %}
+{% include 'personal_page/email_form.html' %}
+</div>
+</div>
 
 {% endblock %}

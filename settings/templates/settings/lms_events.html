@@ -1,0 +1,154 @@
+{% extends 'settings/index.html' %}
+{% load staticfiles %}
+
+{% block content %}
+
+    <div class="row">
+        <h4 class ="">Настройка событий</h4>
+    </div>
+    <div class="row">
+        <form action="/settings/events" method="post" class="col-12 pt-2 border-top">
+            {% csrf_token %}
+            <div class="form-group row">
+                <label for="id_name" class="col-4 col-form-label text-muted">Новое событие</label>
+                <div class="col-4">
+                    <input type="text" class="form-control" id="id_name" required  name="name" placeholder="Название события">
+                    {% for error in form.Name.errors %}
+                        <div class="text-danger text-center">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="col text-right">
+                    <button type="submit" class="btn btn-primary">Создать</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="row">
+        <ul class="list-group col-12">
+            {% for event in events %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>{{ event.0 }} </span>
+                    <div class="col-2 d-flex justify-content-between align-items-center">
+                        <button id ="{{ event.0.id }}" class=" btn badge badge-dark badge-pill text-light" data-toggle="modal" data-target=".bd-example-modal-sm2" value ="{{ event.1 }}">{{ event.1 }}</button>
+                        <button id ="{{ event.0.id }}" class="btn btn-light fas fa-trash" data-toggle="modal" data-target=".bd-example-modal-sm"></button>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+{% endblock %}
+
+{% block footer %}
+    <div class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="eventDeleteConfirm">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <p>Вы действительно хотите удалить событие?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="confirmButton" onclick="delete_event()">Да</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Нет</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade bd-example-modal-sm2" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="eventPoints">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <form action="/settings/events" method="post">
+                         {% csrf_token %}
+                        <div class="form-group row ml-2">
+                             <label for="id_points" class="form-check-label text-muted col-3">Количество очков</label>
+                            <div class="col-8"><input type="number" class="form-control" id="id_points" name="points"></div>
+                        </div>
+                        <input type="number" id="id_event" name="event" HIDDEN>
+                        <button type="submit" class="btn btn-primary">Сохранить</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block script %}
+    <script>
+
+
+    currentid = -1;
+    // using jQuery
+    function getCookie(name) {
+        cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            cookies = document.cookie.split(';');
+            for (i = 0; i < cookies.length; i++) {
+                cookie = jQuery.trim(cookies[i]);
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    csrftoken = getCookie('csrftoken');
+
+    function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+    $.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    }
+    });
+
+    function delete_event() {
+
+        if (currentid != -1) {
+            $.post("/settings/delevent/", {id: currentid}, OnSuccess)
+        }
+        }
+
+    function OnSuccess (data) {
+            if(data='ok'){
+                location.reload()
+            }
+            else
+                alert('Произошла ошибка')
+
+    }
+
+    $('#eventDeleteConfirm').on('show.bs.modal', function (event) {
+        button = $(event.relatedTarget);
+        currentid = button[0].id
+})
+    $('#eventPoints').on('show.bs.modal', function (event) {
+        button = $(event.relatedTarget);
+        currentid = button[0].id;
+        el = document.getElementById('id_event');
+        el.value = currentid;
+        point = button[0].value;
+        if (point != 'задать'){
+            el2 = document.getElementById('id_points');
+            el2.value = point
+        }
+})
+
+
+
+    </script>
+{% endblock %}
