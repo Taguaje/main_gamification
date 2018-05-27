@@ -78,19 +78,26 @@ def events(request):
     else:
         form_create = EventCreate
 
+    if lms.MaxPoints == None:
+        maxPoints = "не задано"
+    else:
+        maxPoints = lms.MaxPoints
     events = LMSEvents.objects.filter(lms=lms)
     eventlist = []
     for event in events:
-        try:
-            points = EventPoints.objects.get(event=event, lms=lms)
-        except EventPoints.DoesNotExist:
-            point = 'задать'
-            eventlist.append((event, point))
+        if lms.PointsIsOn:
+            try:
+                points = EventPoints.objects.get(event=event, lms=lms)
+            except EventPoints.DoesNotExist:
+                point = 'задать'
+                eventlist.append((event, point))
+            else:
+                point = points.points
+                eventlist.append((event, point))
         else:
-            point = points.points
-            eventlist.append((event, point))
+            eventlist.append((event,))
 
-    return render(request, 'settings/lms_events.html', {'form1': form_create, 'events': eventlist})
+    return render(request, 'settings/lms_events.html', {'form1': form_create, 'events': eventlist, 'pointIsOn': lms.PointsIsOn, 'maxPoints': maxPoints})
 
 
 def delete_event(request):
@@ -99,3 +106,43 @@ def delete_event(request):
         event = LMSEvents.objects.get(id = id)
         event.delete()
         return HttpResponse('ok', content_type='text/html')
+
+
+def turn_points_on(request):
+    if request.method == 'POST':
+        try:
+            users_lms = LMSUsers.objects.get(user=request.user)
+        except LMSUsers.DoesNotExist:
+            return HttpResponse('fail', content_type='text/html')
+        else:
+            lms = users_lms.lms
+            lms.PointsIsOn = True
+            lms.save()
+            return HttpResponse('ok', content_type='text/html')
+
+
+def turn_points_off(request):
+    if request.method == 'POST':
+        try:
+            users_lms = LMSUsers.objects.get(user=request.user)
+        except LMSUsers.DoesNotExist:
+            return HttpResponse('fail', content_type='text/html')
+        else:
+            lms = users_lms.lms
+            lms.PointsIsOn = False
+            lms.save()
+            return HttpResponse('ok', content_type='text/html')
+
+
+def set_max_points(request):
+    if request.method == 'POST':
+        try:
+            users_lms = LMSUsers.objects.get(user=request.user)
+        except LMSUsers.DoesNotExist:
+            return HttpResponseRedirect('/settings/events')
+        else:
+            maxpoints = request.POST.get('maxpoints')
+            lms = users_lms.lms
+            lms.MaxPoints = maxpoints
+            lms.save()
+            return HttpResponseRedirect('/settings/events')

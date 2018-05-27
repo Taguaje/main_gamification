@@ -5,7 +5,9 @@ from django.contrib.auth.models import User
 class LMS(models.Model):
     Name = models.CharField(max_length=100)
     PointsIsOn = models.BooleanField(default=False)
-    MaxPoints = models.IntegerField(default=0)
+    MaxPoints = models.IntegerField(default=0, blank=True, null=True)
+    MaxLevel = models.IntegerField(default=10, blank=True, null=True)
+    PointPerLevel = models.IntegerField(default=0, blank=True , null=True)
 
 
 class LMSUsers(models.Model):
@@ -17,6 +19,9 @@ class LMSEvents(models.Model):
     name = models.CharField(max_length=100)
     lms = models.ForeignKey(LMS, on_delete=models.CASCADE)
 
+    class Meta:
+        unique_together = ('lms', 'name')
+
     def __str__(self):
         return self.name
 
@@ -25,6 +30,15 @@ class EventPoints(models.Model):
     event = models.ForeignKey(LMSEvents, on_delete=models.CASCADE)
     lms = models.ForeignKey(LMS, on_delete=models.CASCADE)
     points = models.IntegerField(default=0)
+
+    class Meta:
+        unique_together = ('lms', 'event')
+
+
+class LevelOption(models.Model):
+    event = models.ForeignKey(LMSEvents, on_delete=models.CASCADE)
+    lms = models.ForeignKey(LMS, on_delete=models.CASCADE)
+    amount = models.IntegerField(default=0)
 
     class Meta:
         unique_together = ('lms', 'event')
