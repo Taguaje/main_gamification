@@ -2,7 +2,7 @@ from django.db.models import QuerySet
 from django.shortcuts import render
 
 from settings.models import LMSEvents
-from .models import LMS, LMSUsers, LMSEvents, EventPoints
+from .models import LMS, LMSUsers, LMSEvents, EventPoints, LevelOption
 from .forms import LMSChangeNameForm, LMSCreateForm, EventCreate
 from django.http import HttpResponseRedirect, HttpResponse
 
@@ -146,3 +146,63 @@ def set_max_points(request):
             lms.MaxPoints = maxpoints
             lms.save()
             return HttpResponseRedirect('/settings/events')
+
+def levels(request):
+    try:
+        users_lms = LMSUsers.objects.get(user=request.user)
+    except LMSUsers.DoesNotExist:
+        return HttpResponseRedirect('/settings')
+    lms = users_lms.lms
+    if lms.MaxLevel == None:
+        maxLevel = "не задано"
+    else:
+        maxLevel = lms.MaxLevel
+    events = LMSEvents.objects.filter(lms=lms)
+    options = LevelOption.objects.filter(lms=lms)
+
+    return render(request, 'settings/lms_levels.html',{'maxLevel': maxLevel, 'events': events, 'options': options})
+
+
+def set_max_level(request):
+    if request.method == 'POST':
+        try:
+            users_lms = LMSUsers.objects.get(user=request.user)
+        except LMSUsers.DoesNotExist:
+            return HttpResponseRedirect('/settings/levels')
+        else:
+            maxlevel = request.POST.get('maxlevel')
+            lms = users_lms.lms
+            lms.MaxLevel = maxlevel
+            lms.save()
+            return HttpResponseRedirect('/settings/levels')
+
+def add_level_option(request):
+    if request.method == 'POST':
+        try:
+            users_lms = LMSUsers.objects.get(user=request.user)
+        except LMSUsers.DoesNotExist:
+            return HttpResponseRedirect('/settings/levels')
+        else:
+            eventid = request.POST.get('event')
+            try:
+                event = LMSEvents.objects.get(id=eventid)
+            except LMSEvents.DoesNotExist:
+                return HttpResponseRedirect('/settings/levels')
+            else:
+                amount = request.POST.get('amount')
+                if int(amount) != 0 and amount != None:
+                    lms = users_lms.lms
+                    option = LevelOption()
+                    option.lms = lms
+                    option.event = event
+                    option.amount = amount
+                    option.save()
+                    return HttpResponseRedirect('/settings/levels')
+
+
+def delete_option(request):
+    if request.method == 'POST':
+        id = request.POST.get('id')
+        option = LevelOption.objects.get(id = id)
+        option.delete()
+        return HttpResponse('ok', content_type='text/html')

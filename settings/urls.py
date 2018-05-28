@@ -9,5 +9,9 @@ urlpatterns = [
     url(r'/delevent', views.delete_event),
     url(r'/turn_points_on', views.turn_points_on),
     url(r'/turn_points_off', views.turn_points_off),
-    url(r'^/set_maxPoints', views.set_max_points)
+    url(r'^/set_maxPoints', views.set_max_points),
+    url(r'/levels', views.levels),
+    url(r'^/set_maxLevel', views.set_max_level),
+    url(r'^/add_level_option', views.add_level_option),
+    url(r'^/deloption', views.delete_option)
 ]

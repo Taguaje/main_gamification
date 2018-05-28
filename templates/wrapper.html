@@ -13,6 +13,13 @@
         body {
         font-family: 'Source Sans Pro', sans-serif;
         }
+        #notifies {
+            position:fixed;
+            width:auto;
+            height:auto;
+            top:80%;
+            right:1%;
+        }
     </style>
 </head>
 <body>
@@ -61,6 +68,7 @@
   </div>
 </nav>
 <div class="container-fluid">
+    <div id="notifies"></div>
     <div class="row">
         <div class="col-sm-2 col-md-2 bd-sidebar pt-2 pb-2 mr-4 border-right">
             {% block sidebar %}
@@ -86,4 +94,64 @@
 {% block script %}
 {% endblock %}
 
+<script>
+      // using jQuery
+    function getCookie(name) {
+        cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            cookies = document.cookie.split(';');
+            for (i = 0; i < cookies.length; i++) {
+                cookie = jQuery.trim(cookies[i]);
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    csrftoken = getCookie('csrftoken');
+
+    function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+    $.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    }
+    });
+
+
+    Notify = {
+            TYPE_INFO: 0,
+            TYPE_SUCCESS: 1,
+            TYPE_WARNING: 2,
+            TYPE_DANGER: 3,
+
+            generate: function (aText, aOptHeader, aOptType_int) {
+                var lTypeIndexes = [this.TYPE_INFO, this.TYPE_SUCCESS, this.TYPE_WARNING, this.TYPE_DANGER];
+                var ltypes = ['alert-info', 'alert-success', 'alert-warning', 'alert-danger'];
+                var ltype = ltypes[this.TYPE_INFO];
+
+                if (aOptType_int !== undefined && lTypeIndexes.indexOf(aOptType_int) !== -1) {
+                    ltype = ltypes[aOptType_int];
+                }
+
+                var lText = '';
+                if (aOptHeader) {
+                    lText += "<h4>"+aOptHeader+"</h4>";
+                }
+                lText += "<p>"+aText+"</p>";
+                var lNotify_e = $("<div class='alert "+ltype+"'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button>"+lText+"</div>");
+
+                setTimeout(function () {
+                    lNotify_e.alert('close');
+                }, 3000);
+                lNotify_e.appendTo($("#notifies"));
+            }
+        };
+</script>
 </html>
