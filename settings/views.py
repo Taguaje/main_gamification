@@ -196,6 +196,7 @@ def add_level_option(request):
                     option.lms = lms
                     option.event = event
                     option.amount = amount
+                    option.isActive = True
                     option.save()
                     return HttpResponseRedirect('/settings/levels')
 
@@ -205,4 +206,39 @@ def delete_option(request):
         id = request.POST.get('id')
         option = LevelOption.objects.get(id = id)
         option.delete()
+        return HttpResponse('ok', content_type='text/html')
+
+
+def set_level_amount(request):
+    if request.method == 'POST':
+        id = request.POST.get('cur_option')
+        try:
+            option = LevelOption.objects.get(id=id)
+        except LevelOption.DoesNotExist:
+            return HttpResponseRedirect('/settings/levels')
+        else:
+            amount = request.POST.get('amountnew')
+            if amount == None:
+                return HttpResponseRedirect('/settings/levels')
+            else:
+                option.amount = amount
+                option.save()
+                return HttpResponseRedirect('/settings/levels')
+
+
+def turnoff_level(request):
+    if request.method == 'POST':
+        id = request.POST.get('id')
+        option = LevelOption.objects.get(id = id)
+        option.isActive = False
+        option.save()
+        return HttpResponse('ok', content_type='text/html')
+
+
+def turnon_level(request):
+    if request.method == 'POST':
+        id = request.POST.get('id')
+        option = LevelOption.objects.get(id = id)
+        option.isActive = True
+        option.save()
         return HttpResponse('ok', content_type='text/html')

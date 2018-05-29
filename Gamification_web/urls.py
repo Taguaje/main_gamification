@@ -23,5 +23,5 @@ urlpatterns = [
     url(r'^home/', include('home_page.urls')),
     url(r'^accounts/', include('allauth.urls')),
     url(r'^profile', include('personal_page.urls')),
-    url(r'^settings', include('settings.urls'))
+    url(r'^settings/', include('settings.urls'))
 ]

@@ -16,7 +16,7 @@
     </div>
 
     <div class="row">
-        <form class="col-12" action="/settings/add_level_option/" method="post">
+        <form class="col-12" action="/settings/add_level_option" method="post">
         {% csrf_token %}
             <div class="form-group row">
                 <label for="id_leveloption" class="col-4 col-form-label text-muted">Новое условие</label>
@@ -44,13 +44,25 @@
         <div class="card-deck-wrapper pb-5 pt-5">
             <div class="card-deck">
                 {% for option in options %}
-                    <div class="card text-center border-dark">
+                    {% if option.isActive %}
+                        <div class="card text-center border-dark">
+                    {% else %}
+                        <div class="card text-center">
+                    {% endif %}
                         <div class="card-body">
-                            <h5 class="card-title">{{ option.event }}</h5>
+                            {% if option.isActive %}
+                                <h5 class="card-title">{{ option.event }}</h5>
+                            {% else %}
+                                <h5 class="card-title text-muted">{{ option.event }}</h5>
+                            {% endif %}
                         </div>
                         <div class="card-footer">
-                            <button  class="btn btn-light fas fa-power-off"></button>
-                            <button  class=" btn badge badge-dark badge-pill text-light" data-toggle="modal" data-target=".bd-set-amount" value ="{{ option.id }}">{{ option.amount }}</button>
+                            {% if option.isActive %}
+                                <button id ="{{ option.id }}" class="btn btn-light fas fa-power-off" onclick="turnoff(this.id);"></button>
+                            {% else %}
+                                <button id ="{{ option.id }}" class="btn btn-light fas fa-plug" onclick="turnon(this.id);"></button>
+                            {% endif %}
+                            <button id ="{{ option.id }}" class=" btn badge badge-dark badge-pill text-light" data-toggle="modal" data-target=".bd-set-amount" value ="{{ option.amount }}">{{ option.amount }}</button>
                             <button id ="{{ option.id }}" class="btn btn-light fas fa-trash" data-toggle="modal" data-target=".bd-delete-option"></button>
                         </div>
                     </div>
@@ -83,8 +95,28 @@
         </div>
     </div>
 
+    <div class="modal fade bd-set-amount" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="optionAmount">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <form action="/settings/set_level_amount/" method="post">
+                         {% csrf_token %}
+                        <div class="form-group row ml-2">
+                             <label for="id_amountnew" class="form-check-label text-muted col-3">Количество действий</label>
+                            <div class="col-8"><input type="number" class="form-control" id="id_amountnew" name="amountnew" min="0" oninput="validity.valid||(value='');"></div>
+                        </div>
+                        <input type="number" id="id_cur_option" name="cur_option" HIDDEN>
+                        <button type="submit" class="btn btn-primary">Сохранить</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
-      <div class="modal fade bd-delete-option" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="optionDeleteConfirm">
+    <div class="modal fade bd-delete-option" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="optionDeleteConfirm">
         <div class="modal-dialog modal-sm modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-body">
@@ -100,6 +132,8 @@
             </div>
         </div>
     </div>
+
+
 {% endblock %}
 
 {% block script %}
@@ -137,6 +171,18 @@
            }
        })
 
+        $('#optionAmount').on('show.bs.modal', function (event) {
+        button = $(event.relatedTarget);
+        currentid = button[0].id;
+        el = document.getElementById('id_cur_option');
+        el.value = currentid;
+        amount = button[0].value;
+        if (amount != 'задать'){
+            el2 = document.getElementById('id_amountnew');
+            el2.value = amount
+        }
+})
+
    function checkEvent(event, input) {
        events = document.getElementsByClassName('card-title')
         for (i in events)
@@ -160,6 +206,16 @@
            el.value = "";
            el.disabled = true;
        }
+   }
+
+   function turnoff(id) {
+
+       $.post("/settings/turnoff_level/", {id: id}, OnSuccess)
+   }
+
+   function turnon(id) {
+
+       $.post("/settings/turnon_level/", {id: id}, OnSuccess)
    }
 
    </script>

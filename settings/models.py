@@ -7,7 +7,7 @@ class LMS(models.Model):
     PointsIsOn = models.BooleanField(default=False)
     MaxPoints = models.IntegerField(default=0, blank=True, null=True)
     MaxLevel = models.IntegerField(default=10, blank=True, null=True)
-    PointPerLevel = models.IntegerField(default=0, blank=True , null=True)
+    PointPerLevel = models.IntegerField(default=0, blank=True, null=True)
 
 
 class LMSUsers(models.Model):
@@ -39,6 +39,21 @@ class LevelOption(models.Model):
     event = models.ForeignKey(LMSEvents, on_delete=models.CASCADE)
     lms = models.ForeignKey(LMS, on_delete=models.CASCADE)
     amount = models.IntegerField(default=0)
+    isActive = models.BooleanField(default=True)
 
     class Meta:
         unique_together = ('lms', 'event')
+
+
+class Parameters(models.Model):
+    name = models.CharField(max_length=50)
+    event = models.ForeignKey(LMSEvents, on_delete=models.CASCADE, null=True, unique=True)
+
+
+class Badges(models.Model):
+    name = models.CharField(max_length=50)
+    img = models.CharField(max_length=200)
+    parameter = models.ForeignKey(Parameters, on_delete=models.CASCADE)
+    comparison_type = models.IntegerField(default=0)
+    criterion = models.IntegerField(default=0)
+    lms = models.ForeignKey(LMS, on_delete=models.CASCADE)
