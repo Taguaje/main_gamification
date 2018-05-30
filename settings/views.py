@@ -245,4 +245,11 @@ def turnon_level(request):
 
 
 def badges(request):
-    return  render(request, 'settings/lms_badges.html')
+    try:
+        users_lms = LMSUsers.objects.get(user=request.user)
+    except LMSUsers.DoesNotExist:
+        return HttpResponseRedirect('/settings')
+    else:
+        lms = users_lms.lms
+        events = LMSEvents.objects.filter(lms=lms)
+        return render(request, 'settings/lms_badges.html',{'events': events})
