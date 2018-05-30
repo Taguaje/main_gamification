@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="{% static '/bootstrap/css/bootstrap.css' %}">
     <link href="{% static '/fontawesome/css/fontawesome-all.css' %}" rel="stylesheet">
     <script src="{% static '/bootstrap/js/bootstrap.js' %}"></script>
+    <script src="{% static '/image-picker/image-picker.js' %}"></script>
+    <link rel="stylesheet" href="{% static '/image-picker/image-picker.css' %}">
     <style>
         @import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro&subset=cyrillic');
         body {
@@ -22,6 +24,8 @@
             right:1%;
         }
     </style>
+    {% block head %}
+    {% endblock %}
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light shadow-sm mb-4">

@@ -49,6 +49,9 @@ class Parameters(models.Model):
     name = models.CharField(max_length=50)
     event = models.ForeignKey(LMSEvents, on_delete=models.CASCADE, null=True, unique=True)
 
+    def __str__(self):
+        return self.name
+
 
 class Badges(models.Model):
     name = models.CharField(max_length=50)

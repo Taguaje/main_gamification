@@ -242,3 +242,7 @@ def turnon_level(request):
         option.isActive = True
         option.save()
         return HttpResponse('ok', content_type='text/html')
+
+
+def badges(request):
+    return  render(request, 'settings/lms_badges.html')

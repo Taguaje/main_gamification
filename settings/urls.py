@@ -16,4 +16,5 @@ urlpatterns = [
     url(r'^set_level_amount', views.set_level_amount),
     url(r'^turnoff_level', views.turnoff_level),
     url(r'^turnon_level', views.turnon_level),
+    url(r'^badges',views.badges)
 ]
