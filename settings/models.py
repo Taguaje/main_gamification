@@ -47,7 +47,8 @@ class LevelOption(models.Model):
 
 class Parameters(models.Model):
     name = models.CharField(max_length=50)
-    event = models.ForeignKey(LMSEvents, on_delete=models.CASCADE, null=True, unique=True)
+    event = models.ForeignKey(LMSEvents, on_delete=models.CASCADE, null=True)
+    lms = models.ForeignKey(LMS, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return self.name
@@ -60,3 +61,4 @@ class Badges(models.Model):
     comparison_type = models.IntegerField(default=0)
     criterion = models.IntegerField(default=0)
     lms = models.ForeignKey(LMS, on_delete=models.CASCADE)
+    isActive = models.BooleanField(default=True)

@@ -25,17 +25,49 @@
 
 
     <div class="tab-content">
-        <div class="tab-pane active" id="badges" role="tabpanel">
-
+        <div class="tab-pane active mt-4" id="badges" role="tabpanel">
+        <div class="container-fluid border-top mt-4 mb-3" style="background: repeating-linear-gradient(135deg,transparent,transparent 5px,hsla(0,0%,70%,.03) 0,hsla(0,0%,70%,.03) 10px) hsla(0,0%,70%,.03);">
+            <div class="card-deck-wrapper pb-5 pt-5">
+            <div class="card-deck">
+            {% for badge in badges %}
+                {% if badge.isActive %}
+                    <div class="card text-center border-dark" style="max-width: 210px">
+                {% else %}
+                    <div class="card text-center text-muted" style="max-width: 210px">
+                {% endif %}
+                    <img class="card-img-top p-2" src="{{ badge.img }}" alt="Card image cap" width="200px" height="226px">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ badge.name }}</h5>
+                        <p class="card-text">Условие получения: {{ badge.parameter }}
+                            {% if badge.comparison_type == 0 %} = {% endif %}
+                            {% if badge.comparison_type == 1 %} > {% endif %}
+                            {% if badge.comparison_type == 2 %} < {% endif %}
+                            {{ badge.criterion }}</p>
+                    </div>
+                    <div class="card-footer text-center">
+                            {% if badge.isActive %}
+                                <button id ="{{ badge.id }}" class="btn btn-light fas fa-power-off" onclick="turnoff(this.id);"></button>
+                            {% else %}
+                                <button id ="{{ badge.id }}" class="btn btn-light fas fa-plug" onclick="turnon(this.id);"></button>
+                            {% endif %}
+                            <button id ="{{ badge.id }}" class="btn btn-light fas fa-trash" data-toggle="modal" data-target=".bd-delete-badge"></button>
+                        </div>
+                </div>
+            {% endfor %}
         </div>
+        </div>
+    </div>
+        </div>
+
 
         <div class="tab-pane" id="parameters" role="tabpanel">
             <div class="row col-12 pt-4">
-             <form action="settings/addparameter" method="post" class="col-12">
+             <form action="/settings/addparameter" method="post" class="col-12">
+             {% csrf_token %}
                  <div class="form-group row align-items-center">
-                     <label for="id_name" class="col-3 col-form-label text-muted">Название</label>
+                     <label for="id_name" class="col-3 col-form-label text-muted">Новый показатель</label>
                      <div class="col-3">
-                         <input id="id_name" name="name" class="form-control" type="text" required>
+                         <input id="id_name" name="name" class="form-control" type="text" required placeholder="Название">
                      </div>
                      <div class="col-3">
                          <select class="custom-select" id="id_event" name="event">
@@ -51,11 +83,22 @@
                  </div>
              </form>
             </div>
+            <div class="row pt-2 col-12">
+                <ul class="list-group col-12">
+                    {% for parameter in parameters %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">{{ parameter.name }}
+                        <button id ="{{ parameter.id }}" class="btn btn-light fas fa-trash" data-toggle="modal" data-target=".bd-delete-parameter"></button>
+                        </li>
+                    {% endfor %}
+                </ul>
+
+            </div>
         </div>
 
         <div class="tab-pane" id="newbadges" role="tabpanel">
             <div class="row col-12 pt-4">
-             <form action="settings/addbadge" method="post" class="col-12">
+             <form action="/settings/addbadge" method="post" class="col-12">
+             {% csrf_token %}
                  <div class="form-group row align-items-center">
                      <label for="id_name" class="col-4 col-form-label text-muted">Название</label>
                      <div class="col-6">
@@ -87,7 +130,7 @@
                  <div class="form-group row align-items-center">
                      <label for="id_badge" class="col-4 col-form-label text-muted">Картинка</label>
                      <div class="col-4">
-                         <select class="image_picker_selector" id="id_badge">
+                         <select class="image_picker_selector" id="id_badge" name="badge">
                              <option data-img-src="{% static 'img/badges/Cup_Badge_Color.png' %}" value = "{% static 'img/badges/Cup_Badge_Color.png' %}" data-img-class="m-0 rounded" width="50px" height="50px">1</option>
                              <option data-img-src="{% static 'img/badges/Growth_Badge_Color.png' %}" value = "{% static 'img/badges/Growth_Badge_Color.png' %}" data-img-class="m-0 rounded">2</option>
                              <option data-img-src="{% static 'img/badges/Idea_Badge_Color.png' %}" value = "{% static 'img/badges/Idea_Badge_Color.png' %}" data-img-class="m-0 rounded">3</option>
@@ -95,7 +138,7 @@
                              <option data-img-src="{% static 'img/badges/Medal_Badge_Color.png' %}" value = "{% static 'img/badges/Medal_Badge_Color.png' %}" data-img-class="m-0 rounded">5</option>
                              <option data-img-src="{% static 'img/badges/Monitor_Badge_Color.png' %}" value = "{% static 'img/badges/Monitor_Badge_Color.png' %}" data-img-class="m-0 rounded">6</option>
                              <option data-img-src="{% static 'img/badges/Star_Badge_Color.png' %}" value = "{% static 'img/badges/Star_Badge_Color.png' %}" data-img-class="m-0 rounded">7</option>
-                             <option data-img-src="{% static 'img/badges/Shuttle_Badge_Color.png' %}" value = "img/badges/Shuttle_Badge_Color.png" data-img-class="m-0 rounded">8</option>
+                             <option data-img-src="{% static 'img/badges/Shuttle_Badge_Color.png' %}" value = "{% static 'img/badges/Shuttle_Badge_Color.png'%}" data-img-class="m-0 rounded">8</option>
                          </select>
                      </div>
                  </div>
@@ -110,9 +153,99 @@
 
 {% endblock %}
 
+{% block footer %}
+
+    <div class="modal fade bd-delete-badge" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="badgeDeleteConfirm">
+        <div class="modal-dialog modal-sm modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <p>Вы действительно хотите удалить бэйдж?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="confirmButton" onclick="delete_badge()">Да</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Нет</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade bd-delete-parameter" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="parameterDeleteConfirm">
+        <div class="modal-dialog modal-sm modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <p>Вы действительно хотите удалить параметр?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="confirmButton" onclick="delete_parameter()">Да</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Нет</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+
+
+
+
 {% block script %}
-    <script>
+
+   <script>
+
+    currentid = -1
+    currentpid = -1
+    function OnSuccess (data) {
+            if(data='ok'){
+                location.reload()
+            }
+            else
+                alert('Произошла ошибка')
+
+    }
+
+        function delete_badge() {
+            if (currentid != -1) {
+                $.post("/settings/delete_badge/", {id: currentid}, OnSuccess)
+            }
+        }
+
+        function delete_parameter() {
+            if (currentpid != -1) {
+                $.post("/settings/delete_parameter/", {id: currentpid}, OnSuccess)
+            }
+        }
+
+        $('#badgeDeleteConfirm').on('show.bs.modal', function (event) {
+        button = $(event.relatedTarget);
+        currentid = button[0].id
+})
+
+    $('#parameterDeleteConfirm').on('show.bs.modal', function (event) {
+        button = $(event.relatedTarget);
+        currentpid = button[0].id
+})
+
+    function turnoff(id) {
+
+       $.post("/settings/turnoff_badge/", {id: id}, OnSuccess)
+   }
+
+   function turnon(id) {
+
+       $.post("/settings/turnon_badge/", {id: id}, OnSuccess)
+   }
+
+
     $("#id_badge").imagepicker()
+    $("#id_badgem").imagepicker()
     </script>
 
 {% endblock %}

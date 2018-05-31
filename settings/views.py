@@ -1,8 +1,6 @@
 from django.db.models import QuerySet
 from django.shortcuts import render
-
-from settings.models import LMSEvents
-from .models import LMS, LMSUsers, LMSEvents, EventPoints, LevelOption
+from .models import LMS, LMSUsers, LMSEvents, EventPoints, LevelOption, Parameters, Badges
 from .forms import LMSChangeNameForm, LMSCreateForm, EventCreate
 from django.http import HttpResponseRedirect, HttpResponse
 
@@ -252,4 +250,88 @@ def badges(request):
     else:
         lms = users_lms.lms
         events = LMSEvents.objects.filter(lms=lms)
-        return render(request, 'settings/lms_badges.html',{'events': events})
+        parameters = Parameters.objects.filter(lms=lms)
+        badgelist = Badges.objects.filter(lms=lms)
+        return render(request, 'settings/lms_badges.html',{'events': events, 'parameters': parameters, 'badges': badgelist})
+
+def add_parameter(request):
+    if request.method == 'POST':
+        try:
+            users_lms = LMSUsers.objects.get(user=request.user)
+        except LMSUsers.DoesNotExist:
+            return HttpResponseRedirect('/settings')
+        else:
+            lms = users_lms.lms
+            eventid = request.POST.get('event')
+            try:
+                event = LMSEvents.objects.get(id=eventid)
+            except LMSEvents.DoesNotExist:
+                event = None
+            name = request.POST.get('name')
+            parameter = Parameters()
+            parameter.lms = lms
+            parameter.event = event
+            parameter.name = name
+            parameter.save()
+            return HttpResponseRedirect('/settings/badges')
+
+
+def add_badge(request):
+    if request.method == 'POST':
+        try:
+            users_lms = LMSUsers.objects.get(user=request.user)
+        except LMSUsers.DoesNotExist:
+            return HttpResponseRedirect('/settings')
+        else:
+            lms = users_lms.lms
+            name = request.POST.get('name')
+            parameterid = request.POST.get('parameter')
+            parameter = Parameters.objects.get(id=parameterid)
+            comparison = request.POST.get('comparison')
+            criteria = request.POST.get('criteria')
+            img = request.POST.get('badge')
+
+            badge = Badges()
+            badge.lms = lms
+            badge.parameter = parameter
+            badge.comparison_type = comparison
+            badge.criterion = criteria
+            badge.name = name
+            badge.isActive = True
+            badge.img = img
+            badge.save()
+            return HttpResponseRedirect('/settings/badges')
+
+
+def delete_badge(request):
+    if request.method == 'POST':
+        id = request.POST.get('id')
+        badge = Badges.objects.get(id=id)
+        badge.delete()
+        return HttpResponse('ok', content_type='text/html')
+
+
+def turnoff_badge(request):
+    if request.method == 'POST':
+        id = request.POST.get('id')
+        badge = Badges.objects.get(id = id)
+        badge.isActive = False
+        badge.save()
+        return HttpResponse('ok', content_type='text/html')
+
+
+def turnon_badge(request):
+    if request.method == 'POST':
+        id = request.POST.get('id')
+        badge = Badges.objects.get(id=id)
+        badge.isActive = True
+        badge.save()
+        return HttpResponse('ok', content_type='text/html')
+
+
+def delete_parameter(request):
+    if request.method == 'POST':
+        id = request.POST.get('id')
+        parameter = Parameters.objects.get(id=id)
+        parameter.delete()
+        return HttpResponse('ok', content_type='text/html')

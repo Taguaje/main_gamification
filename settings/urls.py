@@ -16,5 +16,11 @@ urlpatterns = [
     url(r'^set_level_amount', views.set_level_amount),
     url(r'^turnoff_level', views.turnoff_level),
     url(r'^turnon_level', views.turnon_level),
-    url(r'^badges',views.badges)
+    url(r'^badges',views.badges),
+    url(r'^addparameter', views.add_parameter),
+    url(r'^addbadge', views.add_badge),
+    url(r'^delete_badge', views.delete_badge),
+    url(r'^turnoff_badge', views.turnoff_badge),
+    url(r'^turnon_badge', views.turnon_badge),
+    url(r'^delete_parameter', views.delete_parameter)
 ]
