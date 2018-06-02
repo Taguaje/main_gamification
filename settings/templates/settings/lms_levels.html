@@ -10,7 +10,7 @@
             </span>
         </div>
         <div class="col-12 col-sm-4 text-right">
-            <button class="btn btn-outline-primary" data-toggle="modal" data-target=".bd-maxlevel">Изменить</button>
+            <button class="btn btn-outline-primary" data-toggle="modal" data-target="#setMaxLevel">Изменить</button>
         </div>
     </div>
 
@@ -61,8 +61,8 @@
                             {% else %}
                                 <button id ="{{ option.id }}" class="btn btn-light fas fa-plug" onclick="turnon(this.id);"></button>
                             {% endif %}
-                            <button id ="{{ option.id }}" class=" btn badge badge-dark badge-pill text-light" data-toggle="modal" data-target=".bd-set-amount" value ="{{ option.amount }}">{{ option.amount }}</button>
-                            <button id ="{{ option.id }}" class="btn btn-light fas fa-trash" data-toggle="modal" data-target=".bd-delete-option"></button>
+                            <button id ="{{ option.id }}" class=" btn badge badge-dark badge-pill text-light" data-toggle="modal" data-target="#optionAmount" value ="{{ option.amount }}">{{ option.amount }}</button>
+                            <button id ="{{ option.id }}" class="btn btn-light fas fa-trash" data-toggle="modal" data-target="#optionDeleteConfirm"></button>
                         </div>
                     </div>
                 {% endfor %}
@@ -74,8 +74,8 @@
 {% endblock %}
 
 {% block footer %}
-    <div class="modal fade bd-maxlevel" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="setMaxLevel">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal my-fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="setMaxLevel">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-body">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -94,7 +94,7 @@
         </div>
     </div>
 
-    <div class="modal fade bd-set-amount" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="optionAmount">
+    <div class="modal my-fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="optionAmount">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-body">
@@ -115,7 +115,7 @@
         </div>
     </div>
 
-    <div class="modal fade bd-delete-option" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="optionDeleteConfirm">
+    <div class="modal my-fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="optionDeleteConfirm">
         <div class="modal-dialog modal-sm modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-body">

@@ -25,6 +25,36 @@
             top:80%;
             right:1%;
         }
+        .my-fade{
+            transform: scale(0);
+            opacity: 0;
+            -webkit-transition: all 0.3s;
+            -o-transition: all 0.3s;
+            transition: all 0.3s;
+        }
+        .my-fade.show{
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        @media (max-width: 767px) {
+        /*xs*/
+        .btn {
+            padding: 1px 5px;
+            font-size: 12px;
+            line-height: 1.5;
+            border-radius: 3px;
+        }
+    }
+    @media (min-width: 768px) and (max-width: 991px) {
+        /*sm*/
+        .btn {
+            padding: 5px 10px;
+            font-size: 12px;
+            line-height: 1.5;
+            border-radius: 3px;
+        }
+    }
     </style>
     {% block head %}
     {% endblock %}
