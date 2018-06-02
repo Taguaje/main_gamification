@@ -1,16 +1,15 @@
 {% extends 'settings/index.html' %}
 {% block content%}
-    <div class="row">
-        <h4>Уровни</h4>
-    </div>
-    <div class="row pt-4 pb-4 border-top align-items-center">
+
+    <h5>Уровни</h5>
+    <div class="row pt-4 pb-4 border-top align-items-sm-center">
         <label class="col-4 text-muted">Максимальное количество уровней</label>
-        <div class="col-4 text-center">
+        <div class="col-8 col-sm-4 text-sm-center text-right">
             <span id="maxLevel" value ="{{maxLevel}}">
                 {{ maxLevel }}
             </span>
         </div>
-        <div class="col text-right">
+        <div class="col-12 col-sm-4 text-right">
             <button class="btn btn-outline-primary" data-toggle="modal" data-target=".bd-maxlevel">Изменить</button>
         </div>
     </div>
@@ -18,9 +17,9 @@
     <div class="row">
         <form class="col-12" action="/settings/add_level_option" method="post">
         {% csrf_token %}
-            <div class="form-group row">
-                <label for="id_leveloption" class="col-4 col-form-label text-muted">Новое условие</label>
-                <div class="col-4">
+            <div class="form-group row align-items-sm-center">
+                <label for="id_leveloption" class="col-4 text-muted">Новое условие</label>
+                <div class="col-8 col-sm-4">
                     <div class="input-group">
                         <select class="custom-select" onchange="checkEvent(this.selectedOptions[0].innerHTML, this)" id="id_event" name="event">
                             <option selected value="Не выбрано">Выберите...</option>
@@ -33,7 +32,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col text-right">
+                <div class="col-12 col-sm-4 text-right">
                     <button type="submit" class= "btn btn-outline-primary">Добавить</button>
                 </div>
             </div>

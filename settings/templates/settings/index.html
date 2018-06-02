@@ -16,8 +16,8 @@
 {% endblock %}
 
 {% block content %}
-    <h4>Ваша LMS</h4>
-    <div class="row border-top pt-2 pb-2">
+    <h5>Ваша LMS</h5>
+    <div class="row border-top pt-2 pb-3 align-items-center">
         <div class="col">
             <label class="text-muted" for="email">LMS </label>
         </div>
@@ -35,9 +35,9 @@
         </div>
     </div>
     {% if form.email.errors %}
-        <div class="collapse show" id="collapseExample">
+        <div class="collapse show pb-1" id="collapseExample">
     {% else %}
-        <div class="collapse" id="collapseExample">
+        <div class="collapse pb-1" id="collapseExample">
     {% endif %}
 {% if lms == 'не создана' %}
     {% include 'settings/lms_create_form.html' %}
@@ -45,11 +45,8 @@
     {% include 'settings/lms_change_name_form.html' %}
 {% endif %}
 </div>
-<div class="row">
-    <h4>Компоненты игрофикации</h4>
-</div>
-<div class="container-fluid border-top pl-0 pr-0">
-    <div class="row pt-2 pb-2 align-items-center">
+<h5>Компоненты игрофикации</h5>
+<div class="row pt-2 pb-2 align-items-center  border-top">
         <div class="col">
             <img src="{% static '/img/if_sport_badges-07.png' %}" class="img-fluid" height="40" width="40">
             <span>События</span>
@@ -85,7 +82,6 @@
             <button class="btn btn-outline-primary">Настроить</button>
         </div>
     </div>
-</div>
 
 {% endblock %}
 

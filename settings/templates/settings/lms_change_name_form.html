@@ -1,8 +1,8 @@
 <form action="/settings/" method="post">
     {% csrf_token %}
-    <div class="form-group row pt-2 pb-2 border-top">
-        <label for="id_Name" class="col-4 col-form-label text-muted">Новое имя системы</label>
-        <div class="col-4">
+    <div class="form-group row pt-2 pb-2 border-top align-items-center">
+        <label for="id_Name" class="col col-form-label text-muted">Новое имя системы</label>
+        <div class="col">
             <input type="text" class="form-control" id="id_Name" required  name="Name">
             {% for error in form.Name.errors %}
                 <div class="text-danger text-center">

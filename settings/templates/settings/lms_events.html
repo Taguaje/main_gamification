@@ -21,12 +21,11 @@
 
 {% block content %}
 
-    <div class="row">
-        <h4>Очки</h4>
-    </div>
-    <div class="row pt-4 pb-4 border-top align-items-center">
+
+    <h4>Очки</h4>
+    <div class="row pt-4 pb-4 border-top align-items-sm-center">
         <label class="col-4 text-muted">Подсчет очков</label>
-        <div class="col-4 text-center">
+        <div class="col-8 col-sm-4 text-sm-center text-right">
             <span>
                 {% if pointIsOn %}
                     включен
@@ -35,7 +34,7 @@
                 {% endif %}
             </span>
         </div>
-        <div class="col text-right">
+        <div class="col-12 col-sm-4 text-right">
             {% if pointIsOn %}
                 <button class="btn btn-outline-primary" onclick="turn_points_off()">Выключить</button>
             {% else %}
@@ -45,28 +44,28 @@
     </div>
 
     {% if pointIsOn %}
-        <div class="row pb-4 align-items-center">
+        <div class="row pb-4 align-items-sm-center">
         <label class="col-4 text-muted">Максимальное количество очков</label>
-        <div class="col-4 text-center">
+        <div class="col-8 col-sm-4 text-sm-center text-right">
             <span id="maxPoints" value ="{{maxPoints}}">
                 {{ maxPoints }}
             </span>
         </div>
-        <div class="col text-right">
+        <div class="col-12 col-sm-4 text-right">
             <button class="btn btn-outline-primary" data-toggle="modal" data-target="#setMaxPoints">Изменить</button>
         </div>
     </div>
     {% endif %}
 
-    <div class="row">
-        <h4>События</h4>
-    </div>
+
+    <h4>События</h4>
+
     <div class="row">
         <form action="/settings/events" method="post" class="col-12 pt-4 border-top">
             {% csrf_token %}
-            <div class="form-group row">
-                <label for="id_name" class="col-4 col-form-label text-muted">Новое событие</label>
-                <div class="col-4">
+            <div class="form-group row align-items-sm-center">
+                <label for="id_name" class="col-4 text-muted">Новое событие</label>
+                <div class="col-8 col-sm-4 text-sm-center text-right">
                     <input type="text" class="form-control" id="id_name" required  name="name" placeholder="Название события" onchange="validate(this.value, this);">
                     {% for error in form.Name.errors %}
                         <div class="text-danger text-center">
@@ -74,7 +73,7 @@
                         </div>
                     {% endfor %}
                 </div>
-                <div class="col text-right">
+                <div class="col-12 col-sm-2 text-right p-sm-0 p-2">
                     <button type="submit" class= "btn btn-outline-primary">Добавить</button>
                 </div>
             </div>
