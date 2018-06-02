@@ -31,11 +31,11 @@
             <div class="card-deck">
             {% for badge in badges %}
                 {% if badge.isActive %}
-                    <div class="card text-center border-dark" style="max-width: 210px">
+                    <div class="card text-center border-dark" style="max-width: 12rem">
                 {% else %}
-                    <div class="card text-center text-muted" style="max-width: 210px">
+                    <div class="card text-center text-muted" style="max-width: 12rem">
                 {% endif %}
-                    <img class="card-img-top p-2" src="{{ badge.img }}" alt="Card image cap" width="200px" height="226px">
+                    <img class="card-img-top p-2 img-fluid" src="{{ badge.img }}" alt="Card image cap">
                     <div class="card-body">
                         <h5 class="card-title">{{ badge.name }}</h5>
                         <p class="card-text">Условие получения: {{ badge.parameter }}

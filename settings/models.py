@@ -35,7 +35,7 @@ class EventPoints(models.Model):
         unique_together = ('lms', 'event')
 
 
-class LevelOption(models.Model):
+class LevelOptions(models.Model):
     event = models.ForeignKey(LMSEvents, on_delete=models.CASCADE)
     lms = models.ForeignKey(LMS, on_delete=models.CASCADE)
     amount = models.IntegerField(default=0)

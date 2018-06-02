@@ -1,10 +1,14 @@
 from django.db.models import QuerySet
 from django.shortcuts import render
-from .models import LMS, LMSUsers, LMSEvents, EventPoints, LevelOption, Parameters, Badges
-from .forms import LMSChangeNameForm, LMSCreateForm, EventCreate
+from .models import LMS, LMSUsers, LMSEvents, EventPoints, LevelOptions, Parameters, Badges
+from .forms import LMSChangeNameForm, LMSCreateForm, EventForm
 from django.http import HttpResponseRedirect, HttpResponse
 
+
+# главная страница настройки компонентов игрофикации
 def index(request):
+
+    # проверяем создана ли LMS для пользователя
     try:
         users_lms = LMSUsers.objects.get(user=request.user)
     except LMSUsers.DoesNotExist:
@@ -14,6 +18,7 @@ def index(request):
         lmsname = lms.Name
 
     if request.method == 'POST':
+        # если не LMS не создана, создаем новую и связывыем ее с пользователем
         if lmsname == 'не создана':
             form = LMSCreateForm(request.POST)
             if form.is_valid():
@@ -24,6 +29,7 @@ def index(request):
                 lms_user.save()
                 return HttpResponseRedirect('/settings')
         else:
+            # поменяем имя LMS
             form = LMSChangeNameForm(request.POST, instance=lms)
             if form.is_valid():
                 form.save()
@@ -37,6 +43,7 @@ def index(request):
     return render(request,'settings/index.html',{'lms':lmsname, 'form': form})
 
 
+# страница настройки событий
 def events(request):
     try:
         users_lms = LMSUsers.objects.get(user=request.user)
@@ -45,28 +52,7 @@ def events(request):
 
     lms = users_lms.lms
     if request.method == 'POST':
-        if request.POST.get('event') != None:
-            eventid = request.POST.get('event')
-            try:
-                event = LMSEvents.objects.get(id=eventid)
-            except LMSEvents.DoesNotExist:
-                return HttpResponseRedirect('/settings/events')
-            else:
-                try:
-                    event_points = EventPoints.objects.get(event=event, lms=lms)
-                except EventPoints.DoesNotExist:
-                    event_points = EventPoints()
-                    event_points.lms = lms
-                    event_points.event = event
-                    event_points.points = request.POST.get('points')
-                    event_points.save()
-                else:
-                    event_points.points = request.POST.get('points')
-                    event_points.points = request.POST.get('points')
-                    event_points.save()
-                return HttpResponseRedirect('/settings/events')
-
-        form_create = EventCreate(request.POST)
+        form_create = EventForm(request.POST)
         if form_create.is_valid():
             event = LMSEvents()
             event.name = form_create.cleaned_data['name']
@@ -74,28 +60,59 @@ def events(request):
             event.save()
             return HttpResponseRedirect('/settings/events')
     else:
-        form_create = EventCreate
+        form_create = EventForm
 
-    if lms.MaxPoints == None:
-        maxPoints = "не задано"
+    if lms.MaxPoints is None:
+        max_points = "не задано"
     else:
-        maxPoints = lms.MaxPoints
-    events = LMSEvents.objects.filter(lms=lms)
-    eventlist = []
-    for event in events:
+        max_points = lms.MaxPoints
+
+    events_original = LMSEvents.objects.filter(lms=lms)
+    event_list = []
+    for event in events_original:
         if lms.PointsIsOn:
             try:
                 points = EventPoints.objects.get(event=event, lms=lms)
             except EventPoints.DoesNotExist:
                 point = 'задать'
-                eventlist.append((event, point))
+                event_list.append((event, point))
             else:
                 point = points.points
-                eventlist.append((event, point))
+                event_list.append((event, point))
         else:
-            eventlist.append((event,))
+            event_list.append((event,))
 
-    return render(request, 'settings/lms_events.html', {'form1': form_create, 'events': eventlist, 'pointIsOn': lms.PointsIsOn, 'maxPoints': maxPoints})
+    data = {'form': form_create, 'events': event_list, 'pointIsOn': lms.PointsIsOn, 'maxPoints': max_points}
+    return render(request, 'settings/lms_events.html', data)
+
+
+# задаем  количество очков для события
+def set_event_points(request):
+    try:
+        users_lms = LMSUsers.objects.get(user=request.user)
+    except LMSUsers.DoesNotExist:
+        return HttpResponseRedirect('/settings')
+    lms = users_lms.lms
+
+    if request.method == 'POST':
+        event_id = request.POST.get('event')
+        try:
+            event = LMSEvents.objects.get(id=event_id)
+        except LMSEvents.DoesNotExist:
+            return HttpResponseRedirect('/settings/events')
+        else:
+            try:
+                event_points = EventPoints.objects.get(event=event, lms=lms)
+            except EventPoints.DoesNotExist:
+                event_points = EventPoints()
+                event_points.lms = lms
+                event_points.event = event
+                event_points.points = request.POST.get('points')
+                event_points.save()
+            else:
+                event_points.points = request.POST.get('points')
+                event_points.save()
+            return HttpResponseRedirect('/settings/events')
 
 
 def delete_event(request):
@@ -156,7 +173,7 @@ def levels(request):
     else:
         maxLevel = lms.MaxLevel
     events = LMSEvents.objects.filter(lms=lms)
-    options = LevelOption.objects.filter(lms=lms)
+    options = LevelOptions.objects.filter(lms=lms)
 
     return render(request, 'settings/lms_levels.html',{'maxLevel': maxLevel, 'events': events, 'options': options})
 
@@ -190,7 +207,7 @@ def add_level_option(request):
                 amount = request.POST.get('amount')
                 if int(amount) != 0 and amount != None:
                     lms = users_lms.lms
-                    option = LevelOption()
+                    option = LevelOptions()
                     option.lms = lms
                     option.event = event
                     option.amount = amount
@@ -202,7 +219,7 @@ def add_level_option(request):
 def delete_option(request):
     if request.method == 'POST':
         id = request.POST.get('id')
-        option = LevelOption.objects.get(id = id)
+        option = LevelOptions.objects.get(id = id)
         option.delete()
         return HttpResponse('ok', content_type='text/html')
 
@@ -211,8 +228,8 @@ def set_level_amount(request):
     if request.method == 'POST':
         id = request.POST.get('cur_option')
         try:
-            option = LevelOption.objects.get(id=id)
-        except LevelOption.DoesNotExist:
+            option = LevelOptions.objects.get(id=id)
+        except LevelOptions.DoesNotExist:
             return HttpResponseRedirect('/settings/levels')
         else:
             amount = request.POST.get('amountnew')
@@ -227,7 +244,7 @@ def set_level_amount(request):
 def turnoff_level(request):
     if request.method == 'POST':
         id = request.POST.get('id')
-        option = LevelOption.objects.get(id = id)
+        option = LevelOptions.objects.get(id = id)
         option.isActive = False
         option.save()
         return HttpResponse('ok', content_type='text/html')
@@ -236,7 +253,7 @@ def turnoff_level(request):
 def turnon_level(request):
     if request.method == 'POST':
         id = request.POST.get('id')
-        option = LevelOption.objects.get(id = id)
+        option = LevelOptions.objects.get(id = id)
         option.isActive = True
         option.save()
         return HttpResponse('ok', content_type='text/html')

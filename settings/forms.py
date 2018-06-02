@@ -14,7 +14,7 @@ class LMSCreateForm(forms.ModelForm):
         fields = {'Name', 'PointsIsOn', 'MaxPoints'}
 
 
-class EventCreate(forms.ModelForm):
+class EventForm(forms.ModelForm):
     class Meta:
         model = LMSEvents
         fields = {'name'}

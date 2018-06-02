@@ -5,6 +5,7 @@ urlpatterns = [
     url(r'^$', views.index),
     url(r'^/$', views.index),
     url(r'events', views.events),
+    url(r'set_event_points', views.set_event_points),
     url(r'delevent', views.delete_event),
     url(r'turn_points_on', views.turn_points_on),
     url(r'turn_points_off', views.turn_points_off),
