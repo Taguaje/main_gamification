@@ -2,7 +2,10 @@
 {% load staticfiles %}
 
 {% block sidebar %}
-    <ul class="nav nav-pills mb-4 mb-lg-0 flex-lg-column justify-content-around pr-lg-4">
+    <div id="dismiss">
+        <button class="btn bg-light btn-lg"><span class="fa fa-chevron-circle-left"></span></button>
+    </div>
+    <ul class="nav nav-pills mb-4 mb-lg-0 flex-column" id ="navSide">
         <li class="nav-item">
             <a class="nav-link text-dark" href="/profile">Личный кабинет</a>
         </li>
@@ -16,10 +19,10 @@
 {% endblock %}
 
 {% block content %}
-    <h5>Ваша LMS</h5>
+    <h5 id="firstTitle">Ваша LMS</h5>
     <div class="row border-top pt-2 pb-3 align-items-center">
         <div class="col">
-            <label class="text-muted" for="email">LMS </label>
+            <span class="text-muted">LMS </span>
         </div>
         <div class="col text-center">
             <span id="email" class="pl-1">{{ lms }}</span>
@@ -45,7 +48,7 @@
     {% include 'settings/lms_change_name_form.html' %}
 {% endif %}
 </div>
-<h5>Компоненты игрофикации</h5>
+<h5 id="firstTitle">Компоненты игрофикации</h5>
 <div class="row pt-2 pb-2 align-items-center  border-top">
         <div class="col">
             <img src="{% static '/img/if_sport_badges-07.png' %}" class="img-fluid" height="40" width="40">
@@ -76,7 +79,7 @@
     <div class="row pt-2 pb-2 align-items-center">
         <div class="col">
             <img src="{% static '/img/if_sport_badges-05.png' %}" class="img-fluid" height="40" width="40">
-            <span>Таблицы рейтинга</span>
+            <span>Рейтинг</span>
         </div>
         <div class="col text-right">
             <button class="btn btn-outline-primary">Настроить</button>
@@ -84,4 +87,3 @@
     </div>
 
 {% endblock %}
-

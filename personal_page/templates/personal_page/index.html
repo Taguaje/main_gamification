@@ -1,6 +1,9 @@
 {% extends 'wrapper.html' %}
 {% block sidebar %}
-    <ul class="nav nav-pills nav-stacked">
+    <div id="dismiss">
+        <button class="btn bg-light btn-lg"><span class="fa fa-chevron-circle-left"></span></button>
+    </div>
+    <ul class="nav nav-pills mb-4 mb-lg-0 flex-column" id ="navSide">
         <li class="nav-item">
             <a class="nav-link bg-dark active" href="/profile">Личный кабинет</a>
         </li>
@@ -15,15 +18,15 @@
 
 {% block content %}
 
-    <h4>Личные данные</h4>
+    <h5 id="firstTitle">Личные данные</h5>
     <div class="row pt-2 pb-2 border-top">
-        <div class="col-4 col-lg-4">
+        <div class="col">
             <label class="text-muted" for="email">Электронный адрес </label>
         </div>
-        <div class="col-6 col-lg-4 text-center">
+        <div class="col text-center">
             <span id="email" class="pl-1">{{ email }}</span>
         </div>
-        <div class="col-2 col-lg-4 text-right">
+        <div class="col text-right">
             <button class="btn btn-outline-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
                 Изменить
             </button>
