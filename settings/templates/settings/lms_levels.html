@@ -1,10 +1,10 @@
 {% extends 'settings/index.html' %}
 {% block content%}
 
-    <h5>Уровни</h5>
+    <h5 id="firstTitle">Уровни</h5>
     <div class="row pt-4 pb-4 border-top align-items-sm-center">
-        <label class="col-4 text-muted">Максимальное количество уровней</label>
-        <div class="col-8 col-sm-4 text-sm-center text-right">
+        <label class="col-6 col-sm-4 text-muted">Максимальное количество уровней</label>
+        <div class="col-6 col-sm-4 text-sm-center text-right">
             <span id="maxLevel" value ="{{maxLevel}}">
                 {{ maxLevel }}
             </span>
@@ -32,7 +32,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-12 col-sm-4 text-right">
+                <div class="col-12 col-sm-4 text-right pt-2 pt-sm-0">
                     <button type="submit" class= "btn btn-outline-primary">Добавить</button>
                 </div>
             </div>
@@ -75,54 +75,61 @@
 
 {% block footer %}
     <div class="modal my-fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="setMaxLevel">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-body">
+                <div class="modal-header">
+                    <h5>Максимальное количество уровней</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                    <form action="/settings/set_maxLevel" method="post">
+                </div>
+                <form action="/settings/set_maxLevel" method="post">
+                    <div class="modal-body">
                          {% csrf_token %}
-                        <div class="form-group row ml-2">
-                             <label for="id_maxlevel" class="form-check-label text-muted col-3">Количество уровней</label>
-                            <div class="col-8"><input type="number" class="form-control" id="id_maxlevel" name="maxlevel" min="0" oninput="validity.valid||(value='');"></div>
+                        <div class="form-group row">
+                             <label for="id_maxlevel" class="form-check-label text-muted col-4">Количество уровней</label>
+                            <div class="col"><input type="number" class="form-control" id="id_maxlevel" name="maxlevel" min="0" oninput="validity.valid||(value='');"></div>
                         </div>
-                        <button type="submit" class="btn btn-primary">Сохранить</button>
-                    </form>
+                    </div>
+                </form>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Сохранить</button>
                 </div>
             </div>
         </div>
     </div>
 
     <div class="modal my-fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="optionAmount">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-body">
+                <div class="modal-header">
+                    <h5>Изменение условия</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                    <form action="/settings/set_level_amount/" method="post">
+                </div>
+                <form action="/settings/set_level_amount/" method="post">
+                    <div class="modal-body">
                          {% csrf_token %}
-                        <div class="form-group row ml-2">
-                             <label for="id_amountnew" class="form-check-label text-muted col-3">Количество действий</label>
-                            <div class="col-8"><input type="number" class="form-control" id="id_amountnew" name="amountnew" min="0" oninput="validity.valid||(value='');"></div>
+                        <div class="form-group row">
+                             <label for="id_amountnew" class="form-check-label text-muted col-5">Количество действий</label>
+                            <div class="col"><input type="number" class="form-control" id="id_amountnew" name="amountnew" min="0" oninput="validity.valid||(value='');"></div>
                         </div>
                         <input type="number" id="id_cur_option" name="cur_option" HIDDEN>
-                        <button type="submit" class="btn btn-primary">Сохранить</button>
-                    </form>
+                    </div>
+                </form>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Сохранить</button>
                 </div>
             </div>
         </div>
     </div>
 
     <div class="modal my-fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="optionDeleteConfirm">
-        <div class="modal-dialog modal-sm modal-dialog-centered">
+        <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-body">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <p>Вы действительно хотите удалить условие?</p>
+                <div class="modal-body text-center">
+                    <h5>Вы действительно хотите удалить условие?</h5>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" id="confirmButton" onclick="delete_option()">Да</button>

@@ -4,10 +4,10 @@
 {% block content %}
 
 
-    <h4>Очки</h4>
+    <h5 id="firstTitle">Очки</h5>
     <div class="row pt-4 pb-4 border-top align-items-sm-center">
-        <label class="col-4 text-muted">Подсчет очков</label>
-        <div class="col-8 col-sm-4 text-sm-center text-right">
+        <label class="col-6 col-sm-4 text-muted">Подсчет очков</label>
+        <div class="col-6 col-sm-4 text-sm-center text-right">
             <span>
                 {% if pointIsOn %}
                     включен
@@ -27,8 +27,8 @@
 
     {% if pointIsOn %}
         <div class="row pb-4 align-items-sm-center">
-        <label class="col-4 text-muted">Максимальное количество очков</label>
-        <div class="col-8 col-sm-4 text-sm-center text-right">
+        <label class="col-6 col-sm-4 text-muted">Максимальное количество очков</label>
+        <div class="col-6 col-sm-4 text-sm-center text-right">
             <span id="maxPoints" value ="{{maxPoints}}">
                 {{ maxPoints }}
             </span>
@@ -40,7 +40,7 @@
     {% endif %}
 
 
-    <h4>События</h4>
+    <h5>События</h5>
 
     <div class="row">
         <form action="/settings/events" method="post" class="col-12 pt-4 border-top">
@@ -55,7 +55,7 @@
                         </div>
                     {% endfor %}
                 </div>
-                <div class="col-12 col-sm-2 text-right p-sm-0 p-2">
+                <div class="col-12 col-sm-4 text-right p-2">
                     <button type="submit" class= "btn btn-outline-primary">Добавить</button>
                 </div>
             </div>
