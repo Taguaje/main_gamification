@@ -1,4 +1,42 @@
 {% extends 'wrapper.html' %}
+{% load staticfiles %}
+{% block head %}
+    <style>
+    #mainPageimg{
+        border: 1px black;
+        border-radius: 20px;
+    }
+    #mainPagetext{
+        font-size: 2.5rem;
+    }
+    #firstRow{
+        margin-top: 5rem;
+    }
+    @media (min-width: 576px){
+       #colImadge{
+        margin-left: 20%
+       }
+    }
+    </style>
+{% endblock %}
 {% block content %}
+
+    <div class="row" id="firstRow">
+        <div class="col-12 col-sm-7 p-0 p-sm-2">
+            <div class="col-12 col-sm-8" id="colImadge">
+            <img src="{% static 'img/Main.jpeg' %}" class="img-fluid" id="mainPageimg">
+            </div>
+        </div>
+        <div class="col-12 col-sm-5 text-left pt-4 p-sm-0">
+            <div class="text-center col-12 col-sm-6">
+                <span id="mainPagetext">
+                    <p><b>Начни, играя.</b></p>
+                </span>
+            <button class="btn btn-outline-success btn-lg">Попробывать</button>
+            </div>
+        </div>
+
+    </div>
+
 
 {% endblock %}

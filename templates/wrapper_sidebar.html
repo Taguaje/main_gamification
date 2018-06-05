@@ -18,6 +18,13 @@
         body {
             font-family: 'Source Sans Pro', sans-serif;
         }
+        #notifies {
+            position:fixed;
+            width:auto;
+            height:auto;
+            top:80%;
+            right:1%;
+        }
         .my-fade{
             transform: scale(0);
             opacity: 0;
@@ -28,6 +35,73 @@
         .my-fade.show{
             opacity: 1;
             transform: scale(1);
+        }
+
+        @media (min-width: 767px) {
+            .wrapper {
+                display: flex;
+                align-items: stretch;
+            }
+            #sidebar {
+                background: white;
+            }
+            #content {
+                flex: 0 0 75%;
+                max-width: 75%;
+            }
+            #sidebarToggle
+            {
+                display: none;
+            }
+            #firstTitle
+            {
+                padding-top: 1.5rem!important;
+            }
+            #dismiss
+            {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px){
+        #sidebar {
+            width: 200px;
+            position: fixed;
+            top: 0;
+            height: 100vh;
+            left: -200px;
+            z-index: 999;
+            background: white;
+            transition: all 0.3s;
+            overflow-y: scroll;
+            box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        #sidebar.active {
+            left: 0;
+        }
+
+        .wrapper {
+            display: block;
+        }
+
+        #content {
+            width: 100%;
+            padding-top: 20px;
+            min-height: 95vh;
+            transition: all 0.3s;
+            position: relative;
+
+        }
+        #dismiss {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        #navSide
+            {
+                padding-top: 3rem!important;
+            }
         }
 
     </style>
@@ -79,9 +153,18 @@
         </ul>
   </div>
 </nav>
-<div class="container-fluid">
-    {% block content %}
-    {% endblock %}
+<div class="wrapper">
+        <nav id="sidebar" class="p-4" style="overflow: visible;">
+        {% block sidebar %}
+        {% endblock %}
+        </nav>
+        <div id="content">
+            <div class="container-fluid">
+                <button type="button" class="btn mb-2 text-light bg-dark"  id="sidebarToggle"><span class="fa fa-bars pr-1"></span>Меню</button>
+                {% block content %}
+                {% endblock %}
+            </div>
+        </div>
 </div>
 <footer class="bd-footer text-muted fixed-bottom border-top mt-4 bg-light">
     <div class="container-fluid text-center">
@@ -125,6 +208,55 @@
     }
     });
 
+
+    Notify = {
+            TYPE_INFO: 0,
+            TYPE_SUCCESS: 1,
+            TYPE_WARNING: 2,
+            TYPE_DANGER: 3,
+
+            generate: function (aText, aOptHeader, aOptType_int) {
+                var lTypeIndexes = [this.TYPE_INFO, this.TYPE_SUCCESS, this.TYPE_WARNING, this.TYPE_DANGER];
+                var ltypes = ['alert-info', 'alert-success', 'alert-warning', 'alert-danger'];
+                var ltype = ltypes[this.TYPE_INFO];
+
+                if (aOptType_int !== undefined && lTypeIndexes.indexOf(aOptType_int) !== -1) {
+                    ltype = ltypes[aOptType_int];
+                }
+
+                var lText = '';
+                if (aOptHeader) {
+                    lText += "<h4>"+aOptHeader+"</h4>";
+                }
+                lText += "<p>"+aText+"</p>";
+                var lNotify_e = $("<div class='alert "+ltype+"'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button>"+lText+"</div>");
+
+                setTimeout(function () {
+                    lNotify_e.alert('close');
+                }, 3000);
+                lNotify_e.appendTo($("#notifies"));
+            }
+        };
+
+
+    // when opening the sidebar
+    $('#sidebarToggle').on('click', function () {
+        // open sidebar
+        $('#sidebar').addClass('active');
+        // fade in the overlay
+        $('.overlay').fadeIn();
+        $('.collapse.in').toggleClass('in');
+        $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+    });
+
+
+    // if dismiss or overlay was clicked
+    $('#dismiss, .overlay').on('click', function () {
+      // hide the sidebar
+      $('#sidebar').removeClass('active');
+      // fade out the overlay
+      $('.overlay').fadeOut();
+    });
 
 </script>
 </html>
