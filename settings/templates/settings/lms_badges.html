@@ -25,7 +25,7 @@
         <a class="nav-link" data-toggle="tab" href="#parameters" role="tab">Показатели</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" data-toggle="tab" href="#newbadges" role="tab">Новый бейдж</a>
+        <a class="nav-link" data-toggle="tab" href="#newbadges" role="tab">Создать</a>
     </li>
     </ul>
 
@@ -56,7 +56,7 @@
                             {% else %}
                                 <button id ="{{ badge.id }}" class="btn btn-light fas fa-plug" onclick="turnon(this.id);"></button>
                             {% endif %}
-                            <button id ="{{ badge.id }}" class="btn btn-light fas fa-trash" data-toggle="modal" data-target=".bd-delete-badge"></button>
+                            <button id ="{{ badge.id }}" class="btn btn-light fas fa-trash" data-toggle="modal" data-target="#badgeDeleteConfirm"></button>
                         </div>
                 </div>
             {% endfor %}
@@ -93,7 +93,10 @@
                 <ul class="list-group col-12">
                     {% for parameter in parameters %}
                         <li class="list-group-item d-flex justify-content-between align-items-center">{{ parameter.name }}
-                        <button id ="{{ parameter.id }}" class="btn btn-light fas fa-trash" data-toggle="modal" data-target=".bd-delete-parameter"></button>
+                            <div>
+                                <button id ="{{ parameter.id }}" class="btn btn-light fas fa-pencil-alt" data-toggle="modal" data-target="#editParameter{{ parameter.id }}"></button>
+                                <button id ="{{ parameter.id }}" class="btn btn-light fas fa-trash" data-toggle="modal" data-target="#parameterDeleteConfirm"></button>
+                            </div>
                         </li>
                     {% endfor %}
                 </ul>
@@ -162,14 +165,11 @@
 
 {% block footer %}
 
-    <div class="modal fade bd-delete-badge" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="badgeDeleteConfirm">
-        <div class="modal-dialog modal-sm modal-dialog-centered">
+    <div class="modal my-fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="badgeDeleteConfirm">
+        <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-body">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <p>Вы действительно хотите удалить бэйдж?</p>
+                <div class="modal-body text-center">
+                    <h5>Вы действительно хотите удалить бэйдж?</h5>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" id="confirmButton" onclick="delete_badge()">Да</button>
@@ -179,14 +179,11 @@
         </div>
     </div>
 
-    <div class="modal fade bd-delete-parameter" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="parameterDeleteConfirm">
-        <div class="modal-dialog modal-sm modal-dialog-centered">
+    <div class="modal my-fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="parameterDeleteConfirm">
+        <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-body">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <p>Вы действительно хотите удалить параметр?</p>
+                <div class="modal-body text-center">
+                    <h5>Вы действительно хотите удалить параметр?</h5>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" id="confirmButton" onclick="delete_parameter()">Да</button>
@@ -195,6 +192,47 @@
             </div>
         </div>
     </div>
+
+    {% for parameter in parameters %}
+    <div class="modal my-fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="editParameter{{ parameter.id }}">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5>Изменение параметра</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="/settings/editparameter" method="post">
+                    <div class="modal-body">
+                        {% csrf_token %}
+                        <div class="form-group row">
+                            <div class="col-12">
+                                <input id="id_name" name="name" class="form-control" type="text" required placeholder="Название" value="{{ parameter.name }}">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                        <div class="col-12">
+                            <select class="custom-select" id="id_event" name="event">
+                                    {% for event in events %}
+                                        {% if event.id == parameter.event.id %}
+                                            <option value="{{ event.id }}" selected>{{ event }}</option>
+                                        {% else %}
+                                            <option value="{{ event.id }}">{{ event }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                            </select>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Сохранить</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
 
 
 {% endblock %}
